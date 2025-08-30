@@ -3,3 +3,5 @@ uvicorn==0.24.0
 sentence-transformers==2.2.2
 numpy==1.24.3
 pydantic==2.5.0
+setuptools==68.0.0
+wheel==0.41.0
