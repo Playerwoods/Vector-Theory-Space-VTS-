@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧠 Generative Theory Engine - $20 for 15 Uses</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; color: #333;
+        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; color: white; margin-bottom: 40px; }
+        .header h1 { font-size: 3.5em; margin-bottom: 15px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .subtitle { font-size: 1.3em; opacity: 0.9; margin-bottom: 10px; }
+        .pricing { font-size: 1.1em; opacity: 0.8; }
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .card { 
+            background: rgba(255,255,255,0.95); border-radius: 20px; padding: 30px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1); backdrop-filter: blur(10px);
+        }
+        .input-group { margin-bottom: 20px; }
+        .label { display: block; font-weight: 600; margin-bottom: 8px; color: #555; }
+        .input { 
+            width: 100%; padding: 15px; border: 2px solid #e1e5e9; border-radius: 10px; 
+            font-size: 16px; transition: border-color 0.3s;
+        }
+        .input:focus { outline: none; border-color: #667eea; }
+        .button-group { display: flex; gap: 15px; margin-bottom: 20px; }
+        .button { 
+            flex: 1; padding: 15px 25px; border: none; border-radius: 10px; 
+            font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s;
+        }
+        .button-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .button-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(102,126,234,0.3); }
+        .button-secondary { background: linear-gradient(135deg, #ff6b6b, #ee5a52); color: white; }
+        .button:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .usage-info { 
+            background: linear-gradient(135deg, #51cf66, #40c057); color: white; 
+            padding: 15px; border-radius: 10px; text-align: center; font-weight: 600;
+        }
+        .theory-list { max-height: 600px; overflow-y: auto; }
+        .theory-item { 
+            border-left: 4px solid #667eea; background: #f8f9fa; 
+            padding: 20px; margin-bottom: 20px; border-radius: 0 10px 10px 0;
+        }
+        .theory-title { font-size: 1.2em; font-weight: 700; margin-bottom: 10px; color: #667eea; }
+        .theory-description { margin-bottom: 15px; line-height: 1.6; }
+        .conjectures { margin-bottom: 15px; }
+        .conjecture-list { list-style: none; }
+        .conjecture-list li { padding: 5px 0; padding-left: 20px; position: relative; }
+        .conjecture-list li:before { content: "→"; position: absolute; left: 0; color: #667eea; font-weight: bold; }
+        .scores { display: flex; gap: 15px; font-size: 0.9em; color: #666; }
+        .score-item { background: #e9ecef; padding: 5px 10px; border-radius: 15px; }
+        .loading { text-align: center; padding: 60px; color: #666; }
+        .empty-state { text-align: center; padding: 60px; color: #666; font-style: italic; }
+        @media (max-width: 1024px) { 
+            .main-grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 2.5em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 Generative Theory Engine</h1>
+            <div class="subtitle">Transform concepts into novel theories in seconds</div>
+            <div class="pricing">$20 for 15 uses • $1.33 per generation</div>
+        </div>
+
+        <div class="main-grid">
+            <div class="card">
+                <h2 style="margin-bottom: 25px; color: #333;">Theory Generation</h2>
+                
+                <div class="input-group">
+                    <label class="label">Email for Token</label>
+                    <input type="email" id="email" class="input" placeholder="your.email@domain.com" />
+                </div>
+
+                <div class="button-group">
+                    <button class="button button-secondary" onclick="purchaseToken()">Get Token ($20)</button>
+                </div>
+
+                <div class="input-group">
+                    <label class="label">Seed Concept</label>
+                    <textarea id="concept" class="input" rows="4" 
+                        placeholder="Enter your concept (e.g., 'democratic peace theory', 'social capital', 'institutional change')"></textarea>
+                </div>
+
+                <div class="button-group">
+                    <button class="button button-primary" onclick="generateTheories()" id="genBtn">Generate Theories ($1.33)</button>
+                    <button class="button" onclick="loadPreview()" style="background: #6c757d; color: white;">Free Preview</button>
+                </div>
+
+                <div id="usageInfo" style="display: none;"></div>
+                <div id="error" style="color: #ff6b6b; margin-top: 15px;"></div>
+            </div>
+
+            <div class="card">
+                <h2 style="margin-bottom: 25px; color: #333;">Generated Theories</h2>
+                <div id="results" class="empty-state">
+                    Generated theories will appear here
+                    <div style="margin-top: 10px; font-size: 0.9em;">
+                        Each generation creates 5 novel theories with testable conjectures
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Smart API endpoint detection
+        const API_BASE = window.location.hostname.includes('github.io') 
+            ? 'https://theory-engine-production.up.railway.app'  // Production
+            : 'http://localhost:8000';  // Development
+
+        let token = localStorage.getItem('theory_token');
+        if (token) updateTokenDisplay();
+
+        function updateTokenDisplay() {
+            document.getElementById('usageInfo').style.display = 'block';
+            document.getElementById('usageInfo').innerHTML = `
+                <div class="usage-info">
+                    Token: ${token.substring(0,8)}... 
+                    <div style="font-size: 0.9em; opacity: 0.9; margin-top: 5px;">Ready to generate theories</div>
+                </div>
+            `;
+        }
+
+        async function purchaseToken() {
+            const email = document.getElementById('email').value.trim();
+            if (!email || !email.includes('@')) {
+                showError('Please enter a valid email address');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/purchase-token?email=${encodeURIComponent(email)}`, {
+                    method: 'POST'
+                });
+                
+                if (!response.ok) throw new Error('Token purchase failed');
+                
+                const data = await response.json();
+                token = data.token;
+                localStorage.setItem('theory_token', token);
+                updateTokenDisplay();
+                showError(''); // Clear any errors
+                
+                alert(`Token created successfully!\\nToken: ${token}\\n\\nYou now have 15 uses ($1.33 each)`);
+                
+            } catch (error) {
+                showError('Token purchase failed. Please try again.');
+            }
+        }
+
+        async function generateTheories() {
+            const concept = document.getElementById('concept').value.trim();
+            if (!concept) {
+                showError('Please enter a concept to analyze');
+                return;
+            }
+
+            if (!token) {
+                showError('Please purchase a token first');
+                return;
+            }
+
+            setLoading(true);
+            showError('');
+
+            try {
+                const response = await fetch(`${API_BASE}/generate?token=${encodeURIComponent(token)}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ seed_concept: concept, n_theories: 5 })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Generation failed');
+                }
+
+                const data = await response.json();
+                displayResults(data.theories);
+                
+                // Update usage info
+                document.getElementById('usageInfo').innerHTML = `
+                    <div class="usage-info">
+                        Uses remaining: ${data.usage_info.uses_remaining} / 15
+                        <div style="font-size: 0.9em; opacity: 0.9; margin-top: 5px;">
+                            Total used: ${data.usage_info.total_used}
+                        </div>
+                    </div>
+                `;
+                
+            } catch (error) {
+                showError(error.message);
+                if (error.message.includes('no uses remaining')) {
+                    token = null;
+                    localStorage.removeItem('theory_token');
+                    document.getElementById('usageInfo').style.display = 'none';
+                }
+            }
+            
+            setLoading(false);
+        }
+
+        async function loadPreview() {
+            setLoading(true);
+            try {
+                const response = await fetch(`${API_BASE}/preview`);
+                const data = await response.json();
+                displayResults(data.sample_theories);
+            } catch (error) {
+                showError('Preview failed to load');
+            }
+            setLoading(false);
+        }
+
+        function displayResults(theories) {
+            const resultsDiv = document.getElementById('results');
+            
+            if (!theories || theories.length === 0) {
+                resultsDiv.innerHTML = '<div class="empty-state">No theories generated. Please try again.</div>';
+                return;
+            }
+
+            const html = theories.map((theory, index) => `
+                <div class="theory-item">
+                    <div class="theory-title">Theory ${index + 1}</div>
+                    <div class="theory-description">${theory.description}</div>
+                    
+                    <div class="conjectures">
+                        <strong>Testable Conjectures:</strong>
+                        <ul class="conjecture-list">
+                            ${theory.conjectures.map(conjecture => `<li>${conjecture}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="scores">
+                        <span class="score-item">Novelty: ${Math.round(theory.scores.novelty * 100)}%</span>
+                        <span class="score-item">Quality: ${Math.round(theory.scores.total_quality * 100)}%</span>
+                        <span class="score-item">Testability: ${Math.round(theory.scores.testability * 100)}%</span>
+                    </div>
+                </div>
+            `).join('');
+            
+            resultsDiv.innerHTML = html;
+        }
+
+        function setLoading(loading) {
+            const button = document.getElementById('genBtn');
+            const results = document.getElementById('results');
+            
+            if (loading) {
+                button.disabled = true;
+                button.textContent = 'Generating...';
+                results.innerHTML = `
+                    <div class="loading">
+                        <div>🧠 Generating novel theories...</div>
+                        <div style="font-size: 0.9em; margin-top: 10px; opacity: 0.7;">
+                            Exploring theoretical space
+                        </div>
+                    </div>
+                `;
+            } else {
+                button.disabled = false;
+                button.textContent = 'Generate Theories ($1.33)';
+            }
+        }
+
+        function showError(message) {
+            document.getElementById('error').textContent = message;
+        }
+    </script>
+</body>
+</html>
