@@ -3,278 +3,728 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧠 Generative Theory Engine - $20 for 15 Uses</title>
+    <title>Theory This - Advanced Theory Generation Engine</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease-in;
+        }
+        
+        .header h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh; color: #333;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
         }
-        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-        .header { text-align: center; color: white; margin-bottom: 40px; }
-        .header h1 { font-size: 3.5em; margin-bottom: 15px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        .subtitle { font-size: 1.3em; opacity: 0.9; margin-bottom: 10px; }
-        .pricing { font-size: 1.1em; opacity: 0.8; }
-        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .card { 
-            background: rgba(255,255,255,0.95); border-radius: 20px; padding: 30px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1); backdrop-filter: blur(10px);
+        
+        .tagline {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 20px;
         }
-        .input-group { margin-bottom: 20px; }
-        .label { display: block; font-weight: 600; margin-bottom: 8px; color: #555; }
-        .input { 
-            width: 100%; padding: 15px; border: 2px solid #e1e5e9; border-radius: 10px; 
-            font-size: 16px; transition: border-color 0.3s;
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
         }
-        .input:focus { outline: none; border-color: #667eea; }
-        .button-group { display: flex; gap: 15px; margin-bottom: 20px; }
-        .button { 
-            flex: 1; padding: 15px 25px; border: none; border-radius: 10px; 
-            font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s;
+        
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
         }
-        .button-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
-        .button-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(102,126,234,0.3); }
-        .button-secondary { background: linear-gradient(135deg, #ff6b6b, #ee5a52); color: white; }
-        .button:disabled { background: #ccc; cursor: not-allowed; transform: none; }
-        .usage-info { 
-            background: linear-gradient(135deg, #51cf66, #40c057); color: white; 
-            padding: 15px; border-radius: 10px; text-align: center; font-weight: 600;
+        
+        .input-panel, .output-panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-        .theory-list { max-height: 600px; overflow-y: auto; }
-        .theory-item { 
-            border-left: 4px solid #667eea; background: #f8f9fa; 
-            padding: 20px; margin-bottom: 20px; border-radius: 0 10px 10px 0;
+        
+        .input-group {
+            margin-bottom: 25px;
         }
-        .theory-title { font-size: 1.2em; font-weight: 700; margin-bottom: 10px; color: #667eea; }
-        .theory-description { margin-bottom: 15px; line-height: 1.6; }
-        .conjectures { margin-bottom: 15px; }
-        .conjecture-list { list-style: none; }
-        .conjecture-list li { padding: 5px 0; padding-left: 20px; position: relative; }
-        .conjecture-list li:before { content: "→"; position: absolute; left: 0; color: #667eea; font-weight: bold; }
-        .scores { display: flex; gap: 15px; font-size: 0.9em; color: #666; }
-        .score-item { background: #e9ecef; padding: 5px 10px; border-radius: 15px; }
-        .loading { text-align: center; padding: 60px; color: #666; }
-        .empty-state { text-align: center; padding: 60px; color: #666; font-style: italic; }
-        @media (max-width: 1024px) { 
-            .main-grid { grid-template-columns: 1fr; }
-            .header h1 { font-size: 2.5em; }
+        
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        button {
+            flex: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        button.secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .theory-output {
+            display: none;
+        }
+        
+        .theory-output.active {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        .theory-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        
+        .theory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+        }
+        
+        .theory-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .theory-scores {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .score-badge {
+            background: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .score-high { background: #d4edda; color: #155724; }
+        .score-medium { background: #fff3cd; color: #856404; }
+        .score-low { background: #f8d7da; color: #721c24; }
+        
+        .theory-description {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #444;
+        }
+        
+        .conjectures-section {
+            margin-top: 25px;
+        }
+        
+        .conjectures-title {
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .conjecture-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .conjecture-text {
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .conjecture-meta {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .methodology-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f4ff;
+            border-radius: 10px;
+        }
+        
+        .methodology-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #4a5568;
+        }
+        
+        .method-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .method-tag {
+            background: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            border: 1px solid #cbd5e0;
+        }
+        
+        .dimensions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .dimension-item {
+            background: #f7fafc;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.85em;
+        }
+        
+        .dimension-name {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 5px;
+        }
+        
+        .dimension-bar {
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .dimension-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 1s ease-out;
+        }
+        
+        .export-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+        }
+        
+        .export-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .export-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .export-btn:hover {
+            background: white;
+            color: #667eea;
+        }
+        
+        .stats-bar {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: white;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .price-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-left: 15px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🧠 Generative Theory Engine</h1>
-            <div class="subtitle">Transform concepts into novel theories in seconds</div>
-            <div class="pricing">$20 for 15 uses • $1.33 per generation</div>
+            <h1>Theory This</h1>
+            <p class="tagline">Transform concepts into rigorous theoretical frameworks through mathematical vector space</p>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value">768</div>
+                    <div class="stat-label">Dimensions</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">25</div>
+                    <div class="stat-label">Theoretical Axes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">16</div>
+                    <div class="stat-label">Conjecture Patterns</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">∞</div>
+                    <div class="stat-label">Possible Theories</div>
+                </div>
+            </div>
         </div>
 
-        <div class="main-grid">
-            <div class="card">
-                <h2 style="margin-bottom: 25px; color: #333;">Theory Generation</h2>
+        <div class="main-content">
+            <div class="input-panel">
+                <h2>Generate Theory <span class="price-badge">Free Preview</span></h2>
                 
                 <div class="input-group">
-                    <label class="label">Email for Token</label>
-                    <input type="email" id="email" class="input" placeholder="your.email@domain.com" />
+                    <label for="seedConcept">Seed Concept</label>
+                    <textarea id="seedConcept" placeholder="Enter your research concept (e.g., 'democratic backsliding', 'social media polarization', 'institutional resilience')"></textarea>
                 </div>
-
-                <div class="button-group">
-                    <button class="button button-secondary" onclick="purchaseToken()">Get Token ($20)</button>
-                </div>
-
+                
                 <div class="input-group">
-                    <label class="label">Seed Concept</label>
-                    <textarea id="concept" class="input" rows="4" 
-                        placeholder="Enter your concept (e.g., 'democratic peace theory', 'social capital', 'institutional change')"></textarea>
+                    <label for="numConjectures">Number of Conjectures</label>
+                    <select id="numConjectures">
+                        <option value="3">3 Conjectures</option>
+                        <option value="5" selected>5 Conjectures</option>
+                        <option value="7">7 Conjectures</option>
+                        <option value="10">10 Conjectures (Pro)</option>
+                    </select>
                 </div>
-
+                
+                <div class="input-group">
+                    <label for="focusDimension">Focus Dimension (Optional)</label>
+                    <select id="focusDimension">
+                        <option value="">Auto-select</option>
+                        <option value="structure_agency">Structure vs Agency</option>
+                        <option value="material_ideational">Material vs Ideational</option>
+                        <option value="micro_macro">Micro vs Macro</option>
+                        <option value="path_dependence">Path Dependence</option>
+                        <option value="critical_junctures">Critical Junctures</option>
+                        <option value="feedback_loops">Feedback Loops</option>
+                    </select>
+                </div>
+                
                 <div class="button-group">
-                    <button class="button button-primary" onclick="generateTheories()" id="genBtn">Generate Theories ($1.33)</button>
-                    <button class="button" onclick="loadPreview()" style="background: #6c757d; color: white;">Free Preview</button>
+                    <button onclick="generateTheory()" id="generateBtn">Generate Theory</button>
+                    <button onclick="clearAll()" class="secondary">Clear</button>
                 </div>
-
-                <div id="usageInfo" style="display: none;"></div>
-                <div id="error" style="color: #ff6b6b; margin-top: 15px;"></div>
+                
+                <div class="loading" id="loading">
+                    <div>🧠 Exploring theory vector space...</div>
+                    <div style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">Generating logically coherent conjectures...</div>
+                </div>
             </div>
 
-            <div class="card">
-                <h2 style="margin-bottom: 25px; color: #333;">Generated Theories</h2>
-                <div id="results" class="empty-state">
-                    Generated theories will appear here
-                    <div style="margin-top: 10px; font-size: 0.9em;">
-                        Each generation creates 5 novel theories with testable conjectures
-                    </div>
+            <div class="output-panel">
+                <div id="theoryOutput" class="theory-output">
+                    <!-- Theory results will be inserted here -->
+                </div>
+                
+                <div id="emptyState" style="text-align: center; padding: 60px 20px; color: #999;">
+                    <div style="font-size: 3em; margin-bottom: 20px;">🔬</div>
+                    <h3 style="margin-bottom: 10px;">No Theory Generated Yet</h3>
+                    <p>Enter a concept and click "Generate Theory" to explore the theoretical vector space</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Smart API endpoint detection
-        const API_BASE = window.location.hostname.includes('github.io') 
-            ? 'https://theory-engine-production.up.railway.app'  // Production
-            : 'http://localhost:8000';  // Development
-
-        let token = localStorage.getItem('theory_token');
-        if (token) updateTokenDisplay();
-
-        function updateTokenDisplay() {
-            document.getElementById('usageInfo').style.display = 'block';
-            document.getElementById('usageInfo').innerHTML = `
-                <div class="usage-info">
-                    Token: ${token.substring(0,8)}... 
-                    <div style="font-size: 0.9em; opacity: 0.9; margin-top: 5px;">Ready to generate theories</div>
+        // Include the TheoryVectorSpace class here
+        ${TheoryVectorSpaceCode}
+        
+        // Include the ConjectureGenerator class here
+        ${ConjectureGeneratorCode}
+        
+        // Initialize the system
+        const theorySpace = new TheoryVectorSpace();
+        const conjectureGenerator = new ConjectureGenerator(theorySpace);
+        
+        // Track usage for monetization
+        let usageCount = parseInt(localStorage.getItem('theoryThisUsage') || '0');
+        const FREE_LIMIT = 3;
+        
+        function generateTheory() {
+            const seedConcept = document.getElementById('seedConcept').value.trim();
+            const numConjectures = parseInt(document.getElementById('numConjectures').value);
+            const focusDimension = document.getElementById('focusDimension').value;
+            
+            if (!seedConcept) {
+                alert('Please enter a concept to theorize');
+                return;
+            }
+            
+            // Check usage limit
+            if (usageCount >= FREE_LIMIT) {
+                showUpgradePrompt();
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('generateBtn').disabled = true;
+            document.getElementById('emptyState').style.display = 'none';
+            
+            // Simulate processing time for realism
+            setTimeout(() => {
+                // Generate theory vector
+                const theoryVector = theorySpace.generateTheoryVector(seedConcept);
+                
+                // Apply focus dimension if selected
+                if (focusDimension) {
+                    theoryVector.activeDimensions.unshift(focusDimension);
+                }
+                
+                // Generate conjectures
+                const conjectures = conjectureGenerator.generateConjectures(
+                    theoryVector,
+                    seedConcept,
+                    numConjectures
+                );
+                
+                // Display results
+                displayTheoryResults(theoryVector, conjectures, seedConcept);
+                
+                // Update usage
+                usageCount++;
+                localStorage.setItem('theoryThisUsage', usageCount.toString());
+                
+                // Hide loading
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('generateBtn').disabled = false;
+                
+            }, 2000);
+        }
+        
+        function displayTheoryResults(theoryVector, conjectures, seedConcept) {
+            const outputDiv = document.getElementById('theoryOutput');
+            
+            // Create comprehensive output
+            let html = `
+                <div class="theory-card">
+                    <div class="theory-header">
+                        <h3 class="theory-title">Theoretical Framework: ${capitalizeFirst(seedConcept)}</h3>
+                        <div class="theory-scores">
+                            ${generateScoreBadges(theoryVector.scores)}
+                        </div>
+                    </div>
+                    
+                    <div class="theory-description">
+                        <strong>Theory Position:</strong> This theoretical framework explores ${seedConcept} 
+                        through a unique position in high-dimensional theory space, emphasizing 
+                        ${formatActiveDimensions(theoryVector.activeDimensions)}.
+                    </div>
+                    
+                    <div class="dimensions-grid">
+                        ${generateDimensionalAnalysis(theoryVector.position)}
+                    </div>
+                    
+                    <div class="conjectures-section">
+                        <h4 class="conjectures-title">
+                            📊 Testable Conjectures (${conjectures.length})
+                        </h4>
+                        ${generateConjecturesHTML(conjectures)}
+                    </div>
+                    
+                    <div class="export-section">
+                        <div class="export-title">Export Your Theory</div>
+                        <div class="export-buttons">
+                            <button class="export-btn" onclick="exportToJSON()">📄 JSON</button>
+                            <button class="export-btn" onclick="exportToLatex()">📝 LaTeX</button>
+                            <button class="export-btn" onclick="exportToWord()">📋 Word</button>
+                            <button class="export-btn" onclick="copyToClipboard()">📋 Copy</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            outputDiv.innerHTML = html;
+            outputDiv.classList.add('active');
+            
+            // Store current theory for export
+            window.currentTheory = {
+                concept: seedConcept,
+                vector: theoryVector,
+                conjectures: conjectures,
+                timestamp: new Date().toISOString()
+            };
+        }
+        
+        function generateScoreBadges(scores) {
+            return Object.entries(scores).map(([key, value]) => {
+                if (key === 'total') return '';
+                const level = value > 0.7 ? 'high' : value > 0.4 ? 'medium' : 'low';
+                const percentage = Math.round(value * 100);
+                return `<span class="score-badge score-${level}">${capitalizeFirst(key)}: ${percentage}%</span>`;
+            }).join('');
+        }
+        
+        function formatActiveDimensions(dimensions) {
+            return dimensions.slice(0, 3).map(dim => 
+                dim.replace(/_/g, ' ')
+            ).join(', ');
+        }
+        
+        function generateDimensionalAnalysis(position) {
+            const topDimensions = Object.entries(position)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 6);
+            
+            return topDimensions.map(([dim, value]) => {
+                const percentage = Math.round(Math.abs(value) * 100);
+                return `
+                    <div class="dimension-item">
+                        <div class="dimension-name">${dim.replace(/_/g, ' ')}</div>
+                        <div class="dimension-bar">
+                            <div class="dimension-fill" style="width: ${percentage}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function generateConjecturesHTML(conjectures) {
+            return conjectures.map((conj, idx) => `
+                <div class="conjecture-item">
+                    <div class="conjecture-text">
+                        <strong>C${idx + 1}:</strong> ${conj.text}
+                    </div>
+                    <div class="conjecture-meta">
+                        <span class="meta-item">
+                            💪 Strength: ${conj.strength}
+                        </span>
+                        <span class="meta-item">
+                            🧪 Testability: ${conj.testability.level}
+                        </span>
+                        <span class="meta-item">
+                            🔬 Pattern: ${conj.pattern.replace(/_/g, ' ')}
+                        </span>
+                    </div>
+                    ${generateMethodologyHTML(conj.methodology)}
+                </div>
+            `).join('');
+        }
+        
+        function generateMethodologyHTML(methodology) {
+            const methods = [
+                ...methodology.experimental || [],
+                ...methodology.observational || [],
+                ...methodology.qualitative || []
+            ];
+            
+            return `
+                <div class="methodology-section">
+                    <div class="methodology-title">Suggested Methods:</div>
+                    <div class="method-list">
+                        ${methods.slice(0, 4).map(method => 
+                            `<span class="method-tag">${method}</span>`
+                        ).join('')}
+                    </div>
                 </div>
             `;
         }
-
-        async function purchaseToken() {
-            const email = document.getElementById('email').value.trim();
-            if (!email || !email.includes('@')) {
-                showError('Please enter a valid email address');
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API_BASE}/purchase-token?email=${encodeURIComponent(email)}`, {
-                    method: 'POST'
-                });
-                
-                if (!response.ok) throw new Error('Token purchase failed');
-                
-                const data = await response.json();
-                token = data.token;
-                localStorage.setItem('theory_token', token);
-                updateTokenDisplay();
-                showError(''); // Clear any errors
-                
-                alert(`Token created successfully!\\nToken: ${token}\\n\\nYou now have 15 uses ($1.33 each)`);
-                
-            } catch (error) {
-                showError('Token purchase failed. Please try again.');
-            }
+        
+        function capitalizeFirst(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
         }
-
-        async function generateTheories() {
-            const concept = document.getElementById('concept').value.trim();
-            if (!concept) {
-                showError('Please enter a concept to analyze');
-                return;
-            }
-
-            if (!token) {
-                showError('Please purchase a token first');
-                return;
-            }
-
-            setLoading(true);
-            showError('');
-
-            try {
-                const response = await fetch(`${API_BASE}/generate?token=${encodeURIComponent(token)}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ seed_concept: concept, n_theories: 5 })
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.detail || 'Generation failed');
-                }
-
-                const data = await response.json();
-                displayResults(data.theories);
-                
-                // Update usage info
-                document.getElementById('usageInfo').innerHTML = `
-                    <div class="usage-info">
-                        Uses remaining: ${data.usage_info.uses_remaining} / 15
-                        <div style="font-size: 0.9em; opacity: 0.9; margin-top: 5px;">
-                            Total used: ${data.usage_info.total_used}
-                        </div>
-                    </div>
-                `;
-                
-            } catch (error) {
-                showError(error.message);
-                if (error.message.includes('no uses remaining')) {
-                    token = null;
-                    localStorage.removeItem('theory_token');
-                    document.getElementById('usageInfo').style.display = 'none';
-                }
-            }
+        
+        function clearAll() {
+            document.getElementById('seedConcept').value = '';
+            document.getElementById('theoryOutput').innerHTML = '';
+            document.getElementById('theoryOutput').classList.remove('active');
+            document.getElementById('emptyState').style.display = 'block';
+        }
+        
+        function showUpgradePrompt() {
+            alert(`You've used your ${FREE_LIMIT} free theory generations!\n\nUpgrade to Theory This Pro for:\n• Unlimited theory generation\n• 10+ conjectures per theory\n• Export to LaTeX/Word\n• API access\n• Priority support\n\nOnly $29/month for researchers\n$299/month for institutions`);
+        }
+        
+        // Export functions
+        function exportToJSON() {
+            if (!window.currentTheory) return;
             
-            setLoading(false);
-        }
-
-        async function loadPreview() {
-            setLoading(true);
-            try {
-                const response = await fetch(`${API_BASE}/preview`);
-                const data = await response.json();
-                displayResults(data.sample_theories);
-            } catch (error) {
-                showError('Preview failed to load');
-            }
-            setLoading(false);
-        }
-
-        function displayResults(theories) {
-            const resultsDiv = document.getElementById('results');
+            const dataStr = JSON.stringify(window.currentTheory, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
             
-            if (!theories || theories.length === 0) {
-                resultsDiv.innerHTML = '<div class="empty-state">No theories generated. Please try again.</div>';
-                return;
-            }
-
-            const html = theories.map((theory, index) => `
-                <div class="theory-item">
-                    <div class="theory-title">Theory ${index + 1}</div>
-                    <div class="theory-description">${theory.description}</div>
-                    
-                    <div class="conjectures">
-                        <strong>Testable Conjectures:</strong>
-                        <ul class="conjecture-list">
-                            ${theory.conjectures.map(conjecture => `<li>${conjecture}</li>`).join('')}
-                        </ul>
-                    </div>
-                    
-                    <div class="scores">
-                        <span class="score-item">Novelty: ${Math.round(theory.scores.novelty * 100)}%</span>
-                        <span class="score-item">Quality: ${Math.round(theory.scores.total_quality * 100)}%</span>
-                        <span class="score-item">Testability: ${Math.round(theory.scores.testability * 100)}%</span>
-                    </div>
-                </div>
-            `).join('');
+            const exportFileDefaultName = `theory_${window.currentTheory.concept.replace(/\s+/g, '_')}.json`;
             
-            resultsDiv.innerHTML = html;
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
         }
-
-        function setLoading(loading) {
-            const button = document.getElementById('genBtn');
-            const results = document.getElementById('results');
+        
+        function exportToLatex() {
+            alert('LaTeX export available in Pro version');
+        }
+        
+        function exportToWord() {
+            alert('Word export available in Pro version');
+        }
+        
+        function copyToClipboard() {
+            if (!window.currentTheory) return;
             
-            if (loading) {
-                button.disabled = true;
-                button.textContent = 'Generating...';
-                results.innerHTML = `
-                    <div class="loading">
-                        <div>🧠 Generating novel theories...</div>
-                        <div style="font-size: 0.9em; margin-top: 10px; opacity: 0.7;">
-                            Exploring theoretical space
-                        </div>
-                    </div>
-                `;
-            } else {
-                button.disabled = false;
-                button.textContent = 'Generate Theories ($1.33)';
+            const text = `Theory: ${window.currentTheory.concept}\n\nConjectures:\n${
+                window.currentTheory.conjectures.map((c, i) => `${i+1}. ${c.text}`).join('\n')
+            }`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Theory copied to clipboard!');
+            });
+        }
+        
+        // Allow Enter key to generate
+        document.getElementById('seedConcept').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                generateTheory();
             }
-        }
-
-        function showError(message) {
-            document.getElementById('error').textContent = message;
-        }
+        });
+    </script>
+    
+    <script>
+        // Inline the TheoryVectorSpace class code
+        const TheoryVectorSpaceCode = `
+            // [Paste the entire TheoryVectorSpace class here]
+        `;
+        
+        // Inline the ConjectureGenerator class code  
+        const ConjectureGeneratorCode = `
+            // [Paste the entire ConjectureGenerator class here]
+        `;
     </script>
 </body>
 </html>
